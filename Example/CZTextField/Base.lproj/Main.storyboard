@@ -1,11 +1,15 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="whP-gf-Uak">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="whP-gf-Uak">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13174"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Text Filed View Controller-->
         <scene sceneID="wQg-tq-qST">
             <objects>
                 <viewController id="whP-gf-Uak" customClass="CZTextFiledViewController" sceneMemberID="viewController">
@@ -14,10 +18,47 @@
                         <viewControllerLayoutGuide type="bottom" id="Mvr-aV-6Um"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="TpU-gO-2f1">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <subviews>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="bezel" placeholder="asdfasdf" textAlignment="natural" adjustsFontSizeToFit="NO" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="Tjr-YY-8op" customClass="CZTextField">
+                                <rect key="frame" x="16" y="318" width="343" height="31"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="21"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="bezel" placeholder="asdfasdf" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="i3a-OH-Oco">
+                                <rect key="frame" x="16" y="379" width="343" height="27"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="17" minValue="17" maxValue="50" translatesAutoresizingMaskIntoConstraints="NO" id="Zs2-ri-aTE">
+                                <rect key="frame" x="14" y="607" width="347" height="31"/>
+                                <connections>
+                                    <action selector="sliderValueChange:" destination="whP-gf-Uak" eventType="valueChanged" id="Zmb-Gx-0cN"/>
+                                </connections>
+                            </slider>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="Tjr-YY-8op" secondAttribute="trailing" constant="16" id="4So-uT-8Mq"/>
+                            <constraint firstItem="Tjr-YY-8op" firstAttribute="centerY" secondItem="TpU-gO-2f1" secondAttribute="centerY" id="EPt-49-cb9"/>
+                            <constraint firstItem="i3a-OH-Oco" firstAttribute="top" secondItem="Tjr-YY-8op" secondAttribute="bottom" constant="30" id="NZO-xd-aQZ"/>
+                            <constraint firstItem="Mvr-aV-6Um" firstAttribute="top" secondItem="Zs2-ri-aTE" secondAttribute="bottom" constant="30" id="PDh-IG-sLy"/>
+                            <constraint firstItem="Zs2-ri-aTE" firstAttribute="leading" secondItem="TpU-gO-2f1" secondAttribute="leading" constant="16" id="REz-D5-3mN"/>
+                            <constraint firstItem="Zs2-ri-aTE" firstAttribute="centerX" secondItem="TpU-gO-2f1" secondAttribute="centerX" id="jtP-Zk-gK0"/>
+                            <constraint firstAttribute="trailing" secondItem="Zs2-ri-aTE" secondAttribute="trailing" constant="16" id="m5O-ba-4bm"/>
+                            <constraint firstItem="Tjr-YY-8op" firstAttribute="centerX" secondItem="TpU-gO-2f1" secondAttribute="centerX" id="oOD-7l-fbd"/>
+                            <constraint firstItem="Tjr-YY-8op" firstAttribute="leading" secondItem="TpU-gO-2f1" secondAttribute="leading" constant="16" id="sCD-nZ-XPI"/>
+                            <constraint firstItem="i3a-OH-Oco" firstAttribute="leading" secondItem="TpU-gO-2f1" secondAttribute="leading" constant="16" id="tBr-0y-Aqe"/>
+                            <constraint firstAttribute="trailing" secondItem="i3a-OH-Oco" secondAttribute="trailing" constant="16" id="z6E-hN-gUI"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="normalTextField" destination="i3a-OH-Oco" id="VBQ-FU-39v"/>
+                        <outlet property="textField" destination="Tjr-YY-8op" id="hgN-AW-iWX"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tc2-Qw-aMS" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

@@ -2,7 +2,7 @@ use_frameworks!
 
 target 'CZTextField_Example' do
   pod 'CZTextField', :path => '../'
-
+  pod 'Masonry'
   target 'CZTextField_Tests' do
     inherit! :search_paths
 
