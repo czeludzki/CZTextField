@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'CZTextField_Example' do
+  pod 'CZTextField', :path => '../'
+
+  target 'CZTextField_Tests' do
+    inherit! :search_paths
+
+    pod 'FBSnapshotTestCase'
+  end
+end
