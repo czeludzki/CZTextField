@@ -61,6 +61,10 @@ typedef NS_ENUM(NSUInteger, CZTextFieldOverideMethodType) {
         NSString *placeholderContent = self.placeholder;
         [super setPlaceholder:nil];
         self.placeholder = placeholderContent;
+        // attributesPlaceholder
+        NSAttributedString *attributesPlaceholder = self.attributedPlaceholder;
+        [super setAttributedPlaceholder:nil];
+        self.attributedPlaceholder = attributesPlaceholder;
     }
     return self;
 }
@@ -105,9 +109,24 @@ typedef NS_ENUM(NSUInteger, CZTextFieldOverideMethodType) {
     }
 }
 
+- (NSString *)placeholder
+{
+    return self.placeHolderLabel.text;
+}
+
 - (void)setPlaceholder:(NSString *)placeholder
 {
     self.placeHolderLabel.text = placeholder;
+}
+
+- (NSAttributedString *)attributedPlaceholder
+{
+    return self.placeHolderLabel.attributedText;
+}
+
+- (void)setAttributedPlaceholder:(NSAttributedString *)attributedPlaceholder
+{
+    self.placeHolderLabel.attributedText = attributedPlaceholder;
 }
 
 - (void)setFont:(UIFont *)font
