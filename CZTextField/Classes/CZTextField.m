@@ -10,23 +10,38 @@
 
 #define kBottomMargin 4
 
+typedef NS_ENUM(NSUInteger, CZTextFieldOverideMethodType) {
+    CZTextFieldOverideMethodType_TextRect = 1,
+    CZTextFieldOverideMethodType_EditingRect = 1 << 1,
+    CZTextFieldOverideMethodType_ClearButtonRect = 1 << 2,
+    CZTextFieldOverideMethodType_LeftViewRect = 1 << 3,
+    CZTextFieldOverideMethodType_RightViewRect = 1 << 4
+};
+
 @interface CZTextField ()
 @property (nonatomic, weak, readonly) UILabel *placeHolderLabel;
 // 输入内容往下偏移量
 @property (nonatomic, assign) CGFloat textContentOffset;
+/*
+ 缩放状态
+ YES: 缩小到左上角
+ NO : 正常状态
+ */
 @property (nonatomic, assign) BOOL isZoomingOut;
 @end
 
 @implementation CZTextField
+@dynamic placeHolderTextColor;
 
 #pragma mark - Getter && Setter
-- (void)setTextContentOffset:(CGFloat)textContentOffset
+- (void)setPlaceHolderTextColor:(UIColor *)placeHolderTextColor
 {
-    if (textContentOffset < 20) {
-        _textContentOffset = 20;
-    }else{
-        _textContentOffset = textContentOffset;
-    }
+    self.placeHolderLabel.textColor = placeHolderTextColor;
+}
+
+- (UIColor *)placeHolderTextColor
+{
+    return self.placeHolderLabel.textColor;
 }
 
 #pragma mark - LifeCycle
@@ -53,8 +68,7 @@
 - (void)initSetup
 {
     _placeholderScalingFactor = .7f;
-    // 计算 往下偏移的量
-    self.textContentOffset = self.font.lineHeight * self.placeholderScalingFactor;
+    _isZoomingOut = NO;
     // placeHolderLabel
     UILabel *placeHolderLabel = [[UILabel alloc] init];
     placeHolderLabel.backgroundColor = [UIColor clearColor];
@@ -62,31 +76,33 @@
     placeHolderLabel.textColor = [UIColor lightGrayColor];
     [self addSubview:placeHolderLabel];
     _placeHolderLabel = placeHolderLabel;
-    [placeHolderLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(8);
-        make.centerY.mas_equalTo(self.textContentOffset * .5f - kBottomMargin);
-    }];
-    
-    [self addTarget:self action:@selector(cz_textFieldBeginEditing:) forControlEvents:UIControlEventEditingDidBegin];
-    [self addTarget:self action:@selector(cz_textFieldEditingChange:) forControlEvents:UIControlEventEditingChanged];
-    [self addTarget:self action:@selector(cz_textFieldEndEditing:) forControlEvents:UIControlEventEditingDidEnd];
-    [self addTarget:self action:@selector(cz_textFieldEndEditing:) forControlEvents:UIControlEventEditingDidEndOnExit];
 }
 
 #pragma mark - Override
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-    if (self.text.length > 0) {
-        [self zoomOutPlaceholderLabel:YES animate:NO];
+    [self.placeHolderLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(8 + self.leftView.frame.size.width);
+        make.centerY.mas_equalTo(self.textContentOffset * .5f - kBottomMargin);
+    }];
+    if (self.text.length > 0 || self.isEditing) {
+        [self zoomOutPlaceholderLabel:YES animate:YES];
     }else{
-        [self zoomOutPlaceholderLabel:NO animate:NO];
+        [self zoomOutPlaceholderLabel:NO animate:YES];
     }
 }
 
 - (void)setText:(NSString *)text
 {
     [super setText:text];
+    NSLog(@"self.placeHolderLabel.frame = %@",NSStringFromCGRect(self.placeHolderLabel.frame));
+    if (CGRectEqualToRect(CGRectZero, self.placeHolderLabel.frame)) return;
+    if (text.length > 0) {
+        [self zoomOutPlaceholderLabel:YES animate:NO];
+    }else{
+        [self zoomOutPlaceholderLabel:NO animate:NO];
+    }
 }
 
 - (void)setPlaceholder:(NSString *)placeholder
@@ -99,76 +115,71 @@
     [super setFont:font];
     self.placeHolderLabel.font = font;
     self.textContentOffset = self.font.capHeight * self.placeholderScalingFactor;
-    [self.placeHolderLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(8);
-        make.centerY.mas_equalTo(self.textContentOffset * .5f - kBottomMargin);
-    }];
 }
 
 - (CGSize)intrinsicContentSize
 {
     CGSize superSize = [super intrinsicContentSize];
-    return CGSizeMake(superSize.width,
-                      superSize.height + self.textContentOffset);
+    if (self.borderStyle == UITextBorderStyleNone) {
+        NSLog(@"superSize = %@",NSStringFromCGSize(superSize));
+        superSize = CGSizeMake(superSize.width, superSize.height >= 30 ? superSize.height : 30);
+    }
+    self.textContentOffset = superSize.height * self.placeholderScalingFactor;
+    return CGSizeMake(superSize.width, superSize.height + self.textContentOffset);
 }
 
 - (CGRect)textRectForBounds:(CGRect)bounds
 {
     CGRect superTextRect = [super textRectForBounds:bounds];
-    CGFloat y = self.frame.size.height - 4 > superTextRect.origin.y + superTextRect.size.height ? superTextRect.origin.y + self.textContentOffset * .5f - kBottomMargin : superTextRect.origin.y + self.textContentOffset * .5f;
-    return CGRectMake(superTextRect.origin.x, y, superTextRect.size.width, superTextRect.size.height);
+    return [self calculateOffSetRectFromSuper:superTextRect withOverideMethodType:CZTextFieldOverideMethodType_TextRect];
 }
 
 - (CGRect)editingRectForBounds:(CGRect)bounds
 {
     CGRect superTextRect = [super editingRectForBounds:bounds];
-    CGFloat y = self.frame.size.height - 4 > superTextRect.origin.y + superTextRect.size.height ? superTextRect.origin.y + self.textContentOffset * .5f - kBottomMargin : superTextRect.origin.y + self.textContentOffset * .5f;
-    return CGRectMake(superTextRect.origin.x,
-                      y,
-                      superTextRect.size.width,
-                      superTextRect.size.height);
+    return [self calculateOffSetRectFromSuper:superTextRect withOverideMethodType:CZTextFieldOverideMethodType_EditingRect];
 }
 
 - (CGRect)clearButtonRectForBounds:(CGRect)bounds
 {
     CGRect superClearBottonRect = [super clearButtonRectForBounds:bounds];
-    CGFloat y = self.frame.size.height - 4 > superClearBottonRect.origin.y + superClearBottonRect.size.height ? superClearBottonRect.origin.y + self.textContentOffset * .5f - kBottomMargin : superClearBottonRect.origin.y + self.textContentOffset * .5f;
-    return CGRectMake(superClearBottonRect.origin.x,
-                      y,
-                      superClearBottonRect.size.width,
-                      superClearBottonRect.size.height);
+    return [self calculateOffSetRectFromSuper:superClearBottonRect withOverideMethodType:CZTextFieldOverideMethodType_ClearButtonRect];
 }
 
-#pragma mark - Action
-- (void)cz_textFieldBeginEditing:(CZTextField *)sender
+- (CGRect)leftViewRectForBounds:(CGRect)bounds
 {
-    if (self.text.length == 0) {
-        [self zoomOutPlaceholderLabel:YES animate:YES];
-    }
+    CGRect superLeftViewRect = [super leftViewRectForBounds:bounds];
+    return [self calculateOffSetRectFromSuper:superLeftViewRect withOverideMethodType:CZTextFieldOverideMethodType_LeftViewRect];
 }
 
-- (void)cz_textFieldEditingChange:(CZTextField *)sender
+- (CGRect)rightViewRectForBounds:(CGRect)bounds
 {
-    
-}
-
-- (void)cz_textFieldEndEditing:(CZTextField *)sender
-{
-    if (self.text.length == 0) {
-        [self zoomOutPlaceholderLabel:NO animate:YES];
-    }else{
-        [self zoomOutPlaceholderLabel:YES animate:YES];
-    }
+    CGRect superRightViewRect = [super rightViewRectForBounds:bounds];
+    return [self calculateOffSetRectFromSuper:superRightViewRect withOverideMethodType:CZTextFieldOverideMethodType_RightViewRect];
 }
 
 #pragma mark - Helper
+- (CGRect)calculateOffSetRectFromSuper:(CGRect)superRect withOverideMethodType:(CZTextFieldOverideMethodType)methodType
+{
+    CGFloat y = self.frame.size.height - 4 > superRect.origin.y + superRect.size.height ?
+    superRect.origin.y + self.textContentOffset * .5f - kBottomMargin :
+    superRect.origin.y + self.textContentOffset * .5f;
+    
+    // 判断如果 borderStyle 是 UITextBorderStyleNone, 且 重构位置的方法 是 clearButton 或 rightView, 就使他们右移 8pt
+    BOOL judgeMethod = !(methodType & (CZTextFieldOverideMethodType_ClearButtonRect |  CZTextFieldOverideMethodType_RightViewRect));
+    BOOL judgeStyle = (self.borderStyle == UITextBorderStyleNone);
+    
+    CGFloat x = (judgeStyle && judgeMethod) ? superRect.origin.x + 8 : superRect.origin.x;
+    return CGRectMake(x, y, superRect.size.width, superRect.size.height);
+}
+
 - (void)zoomOutPlaceholderLabel:(BOOL)zoomOut animate:(BOOL)animate
 {
     if (zoomOut == self.isZoomingOut) return;
+    self.isZoomingOut = !self.isZoomingOut;
     if (zoomOut) {      // 缩小
-        self.isZoomingOut = YES;
         CGAffineTransform scaleTransform = CGAffineTransformMakeScale(self.placeholderScalingFactor, self.placeholderScalingFactor);
-        CGFloat translationX = -(self.placeHolderLabel.frame.size.width * .5f - self.placeHolderLabel.frame.size.width * .5f * self.placeholderScalingFactor);
+        CGFloat translationX = -(self.placeHolderLabel.frame.size.width * .5f - self.placeHolderLabel.frame.size.width * .5f * self.placeholderScalingFactor + self.leftView.frame.size.width);
         CGFloat translationY = -(self.placeHolderLabel.frame.size.height * .5f - self.placeHolderLabel.frame.size.height * .5f * self.placeholderScalingFactor + self.placeHolderLabel.frame.origin.y - kBottomMargin);
         CGAffineTransform translationTransform = CGAffineTransformMakeTranslation(translationX, translationY);
         if (animate) {
@@ -179,7 +190,6 @@
             self.placeHolderLabel.transform = CGAffineTransformConcat(scaleTransform, translationTransform);
         }
     }else{      // 放大
-        self.isZoomingOut = NO;
         if (animate) {
             [UIView animateWithDuration:.3f animations:^{
                 self.placeHolderLabel.transform = CGAffineTransformIdentity;
@@ -191,3 +201,4 @@
 }
 
 @end
+

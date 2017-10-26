@@ -22,10 +22,26 @@
 	// Do any additional setup after loading the view, typically from a nib.
     self.textField.placeholder = @"请输入密码";
     self.textField.font = [UIFont systemFontOfSize:18];
-    self.textField.text = @"哦哦哦哦哦";
+    
+    UIButton *textFieldLeftView = [UIButton buttonWithType:UIButtonTypeSystem];
+    [textFieldLeftView setTitle:@"我是按钮哦" forState:UIControlStateNormal];
+//    self.textField.leftView = textFieldLeftView;
+//    self.textField.leftViewMode = UITextFieldViewModeAlways;
+    textFieldLeftView.frame = CGRectMake(0, 0, 0, 0);
+    [textFieldLeftView sizeToFit];
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        self.textField.text = @"哦哦哦哦哦";
+    });
     
     [self.textField addTarget:self action:@selector(cz_textFieldBeginEditing:) forControlEvents:UIControlEventEditingDidBegin];
 
+    
+    CZTextField *textFiled2 = [[CZTextField alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width - 32, 10)];
+    textFiled2.center = CGPointMake(self.view.center.x, 88);
+    [self.view addSubview:textFiled2];
+    textFiled2.text = @"textFiled2";
+    textFiled2.placeholder = @"骄傲";
 }
 
 - (void)didReceiveMemoryWarning
@@ -46,7 +62,7 @@
 }
 
 - (IBAction)sliderValueChange:(UISlider *)sender {
-    self.normalTextField.font = [UIFont systemFontOfSize:sender.value];
+    self.textField.font = [UIFont systemFontOfSize:sender.value];
 }
 
 @end
