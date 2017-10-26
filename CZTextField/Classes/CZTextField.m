@@ -111,6 +111,7 @@ typedef NS_ENUM(NSUInteger, CZTextFieldOverideMethodType) {
 
 - (NSString *)placeholder
 {
+    if ([super placeholder].length) return [super placeholder];
     return self.placeHolderLabel.text;
 }
 
@@ -121,6 +122,7 @@ typedef NS_ENUM(NSUInteger, CZTextFieldOverideMethodType) {
 
 - (NSAttributedString *)attributedPlaceholder
 {
+    if ([super attributedPlaceholder].length) return [super attributedPlaceholder];
     return self.placeHolderLabel.attributedText;
 }
 
@@ -194,7 +196,7 @@ typedef NS_ENUM(NSUInteger, CZTextFieldOverideMethodType) {
 
 - (void)zoomOutPlaceholderLabel:(BOOL)zoomOut animate:(BOOL)animate
 {
-    if (zoomOut == self.isZoomingOut) return;
+    if (zoomOut == self.isZoomingOut || CGRectEqualToRect(self.placeHolderLabel.frame, CGRectZero)) return;
     self.isZoomingOut = !self.isZoomingOut;
     if (zoomOut) {      // 缩小
         CGAffineTransform scaleTransform = CGAffineTransformMakeScale(self.placeholderScalingFactor, self.placeholderScalingFactor);

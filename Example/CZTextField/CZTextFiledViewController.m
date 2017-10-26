@@ -20,7 +20,6 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
-    self.textField.placeholder = @"请输入密码";
     self.textField.font = [UIFont systemFontOfSize:18];
     
     UIButton *textFieldLeftView = [UIButton buttonWithType:UIButtonTypeSystem];
