@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		43BE72A11FA2E088004AB828 /* TableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43BE72A01FA2E088004AB828 /* TableViewController.m */; };
 		6003F58E195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58F195388D20070C39A /* CoreGraphics.framework */; };
 		6003F592195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
@@ -38,6 +39,8 @@
 
 /* Begin PBXFileReference section */
 		2550E958FC4DC99BB2AA2437 /* Pods-CZTextField_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CZTextField_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CZTextField_Example/Pods-CZTextField_Example.debug.xcconfig"; sourceTree = "<group>"; };
+		43BE729F1FA2E088004AB828 /* TableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TableViewController.h; sourceTree = "<group>"; };
+		43BE72A01FA2E088004AB828 /* TableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TableViewController.m; sourceTree = "<group>"; };
 		6003F58A195388D20070C39A /* CZTextField_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CZTextField_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58D195388D20070C39A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		6003F58F195388D20070C39A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -62,9 +65,9 @@
 		873B8AEA1B1F5CCA007FD442 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		89FA76374557EF8BD9FC2A45 /* Pods-CZTextField_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CZTextField_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-CZTextField_Tests/Pods-CZTextField_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		A162878E9B443AC8445DE622 /* Pods_CZTextField_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CZTextField_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		AB104E68EA14396EA020A572 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; name = README.md; path = ../README.md; sourceTree = "<group>"; };
-		ACCAFCB0C6BDB242F31B23AC /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
-		C5468FC39DDE6E95F45BCFFB /* CZTextField.podspec */ = {isa = PBXFileReference; includeInIndex = 1; name = CZTextField.podspec; path = ../CZTextField.podspec; sourceTree = "<group>"; };
+		AB104E68EA14396EA020A572 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		ACCAFCB0C6BDB242F31B23AC /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
+		C5468FC39DDE6E95F45BCFFB /* CZTextField.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = CZTextField.podspec; path = ../CZTextField.podspec; sourceTree = "<group>"; };
 		CBE2EAD7228242C5C8CA2ADB /* Pods_CZTextField_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CZTextField_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CFB62223269F02B703E62F2B /* Pods-CZTextField_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CZTextField_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CZTextField_Tests/Pods-CZTextField_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -135,6 +138,8 @@
 				6003F59C195388D20070C39A /* CZTextFiledAppDelegate.h */,
 				6003F59D195388D20070C39A /* CZTextFiledAppDelegate.m */,
 				873B8AEA1B1F5CCA007FD442 /* Main.storyboard */,
+				43BE729F1FA2E088004AB828 /* TableViewController.h */,
+				43BE72A01FA2E088004AB828 /* TableViewController.m */,
 				6003F5A5195388D20070C39A /* CZTextFiledViewController.h */,
 				6003F5A6195388D20070C39A /* CZTextFiledViewController.m */,
 				71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */,
@@ -411,6 +416,7 @@
 				6003F59E195388D20070C39A /* CZTextFiledAppDelegate.m in Sources */,
 				6003F5A7195388D20070C39A /* CZTextFiledViewController.m in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,
+				43BE72A11FA2E088004AB828 /* TableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

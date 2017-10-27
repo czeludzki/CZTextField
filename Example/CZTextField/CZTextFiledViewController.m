@@ -35,12 +35,6 @@
     
     [self.textField addTarget:self action:@selector(cz_textFieldBeginEditing:) forControlEvents:UIControlEventEditingDidBegin];
 
-    
-    CZTextField *textFiled2 = [[CZTextField alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width - 32, 10)];
-    textFiled2.center = CGPointMake(self.view.center.x, 88);
-    [self.view addSubview:textFiled2];
-    textFiled2.text = @"textFiled2";
-    textFiled2.placeholder = @"骄傲";
 }
 
 - (void)didReceiveMemoryWarning
