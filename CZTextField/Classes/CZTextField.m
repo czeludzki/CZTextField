@@ -238,21 +238,21 @@ typedef NS_ENUM(NSUInteger, CZTextFieldOverideMethodType) {
     if (zoomOut) {      // 缩小
         if (animate) {
             [UIView animateWithDuration:.3f animations:^{
-                self.placeHolderLabel.layer.transform = CATransform3DMakeScale(.7f, .7f, 1);
+                self.placeHolderLabel.transform = CGAffineTransformMakeScale(self.placeholderScalingFactor, self.placeholderScalingFactor);
 //                self.placeHolderLabel.frame = CGRectMake(self.placeholderLabelNormalRect.origin.x, 4, self.placeholderLabelNormalRect.size.width, self.placeholderLabelNormalRect.size.height);
             }];
         }else{
-            self.placeHolderLabel.layer.transform = CATransform3DMakeScale(.7f, .7f, 1);
+            self.placeHolderLabel.transform = CGAffineTransformMakeScale(self.placeholderScalingFactor, self.placeholderScalingFactor);
 //            self.placeHolderLabel.frame = CGRectMake(self.placeholderLabelNormalRect.origin.x, 4, self.placeholderLabelNormalRect.size.width, self.placeholderLabelNormalRect.size.height);
         }
     }else{      // 放大
         if (animate) {
             [UIView animateWithDuration:.3f animations:^{
-                self.placeHolderLabel.layer.transform = CATransform3DIdentity;
+                self.placeHolderLabel.transform = CGAffineTransformIdentity;
 //                self.placeHolderLabel.frame = self.placeholderLabelNormalRect;
             }];
         }else{
-            self.placeHolderLabel.layer.transform = CATransform3DIdentity;
+            self.placeHolderLabel.transform = CGAffineTransformIdentity;
 //            self.placeHolderLabel.frame = self.placeholderLabelNormalRect;
         }
     }
