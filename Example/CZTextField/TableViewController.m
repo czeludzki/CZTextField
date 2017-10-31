@@ -23,6 +23,7 @@
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
 }
 
 - (IBAction)tableViewHeaderBtnOnClick:(UIButton *)sender {
@@ -35,11 +36,11 @@
 #pragma mark - Table view data source && delegate
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//    CGFloat superHeight = [super tableView:tableView heightForRowAtIndexPath:indexPath];
+    CGFloat superHeight = [super tableView:tableView heightForRowAtIndexPath:indexPath];
     if (indexPath.row == 0){
         return self.tableViewHeaderBtn.selected ? .1f : UITableViewAutomaticDimension;
     }else{
-        return UITableViewAutomaticDimension;
+        return superHeight;
     }
 }
 

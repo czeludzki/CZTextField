@@ -29,8 +29,8 @@
     textFieldLeftView.frame = CGRectMake(0, 0, 0, 0);
     [textFieldLeftView sizeToFit];
     
+    self.textField.text = @"哦哦哦哦哦";
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        self.textField.text = @"哦哦哦哦哦";
     });
     
     [self.textField addTarget:self action:@selector(cz_textFieldBeginEditing:) forControlEvents:UIControlEventEditingDidBegin];

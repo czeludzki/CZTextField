@@ -90,6 +90,8 @@ typedef NS_ENUM(NSUInteger, CZTextFieldPlaceholderStatus) {
         
         NSString *placeholderContent = self.placeholder;
         self.placeholder = placeholderContent;
+        
+        self.placeHolderLabel.textColor = [UIColor lightGrayColor];
     }
     return self;
 }
@@ -97,7 +99,6 @@ typedef NS_ENUM(NSUInteger, CZTextFieldPlaceholderStatus) {
 - (void)initSetup
 {
     _placeholderScalingFactor = .7f;
-//    self.clipsToBounds = YES;
     // placeHolderLabel
     UILabel *placeHolderLabel = [[UILabel alloc] init];
     placeHolderLabel.backgroundColor = [UIColor clearColor];
@@ -143,7 +144,6 @@ typedef NS_ENUM(NSUInteger, CZTextFieldPlaceholderStatus) {
 {
     [super setFont:font];
     self.placeHolderLabel.font = font;
-    self.textContentOffset = self.font.capHeight * self.placeholderScalingFactor;
 }
 
 - (CGSize)intrinsicContentSize
@@ -161,9 +161,10 @@ typedef NS_ENUM(NSUInteger, CZTextFieldPlaceholderStatus) {
     CGRect superTextRect = [super textRectForBounds:bounds];
     CGRect calculateRect = [self calculateOffSetRectFromSuper:superTextRect withOverideMethodType:CZTextFieldOverideMethodType_TextRect];
     
+    // 如果 placeholderLabelNormalRect 已有值 || textContentOffset 还没计算完毕, 则不往下计算
+    if (self.textContentOffset == 0 || !CGRectEqualToRect(self.placeholderLabelNormalRect, CGRectZero)) return calculateRect;
     // 从此处取得 Placeholder 的 frame, 设置到 PlaceholderLabel
-    if (!CGRectEqualToRect(self.placeholderLabelNormalRect, CGRectZero)) return calculateRect;
-    CGFloat y = self.frame.size.height * self.placeholderScalingFactor + kBottomMargin;
+    CGFloat y = calculateRect.origin.y + self.textContentOffset * .5f - kBottomMargin;
     CGFloat x = calculateRect.origin.x;
     CGSize placeholderSize = [self sizeWithText:self.placeholder font:self.font maxSize:CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX)];
     self.placeHolderLabel.frame = CGRectMake(x, y, placeholderSize.width , placeholderSize.height);
