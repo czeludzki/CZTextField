@@ -106,16 +106,16 @@ typedef NS_ENUM(NSUInteger, CZTextFieldOverideMethodType) {
 {
     [super layoutSubviews];
     if (self.text.length > 0 || self.isEditing) {
-        [self zoomOutPlaceholderLabel:YES animate:YES];
+        [self zoomOutPlaceholderLabel:YES animate:NO];
     }else{
-        [self zoomOutPlaceholderLabel:NO animate:YES];
+        [self zoomOutPlaceholderLabel:NO animate:NO];
     }
 }
 
 - (void)setText:(NSString *)text
 {
     [super setText:text];
-    if (text.length > 0) {
+    if (text.length > 0 || self.isEditing) {
         [self zoomOutPlaceholderLabel:YES animate:NO];
     }else{
         [self zoomOutPlaceholderLabel:NO animate:NO];
@@ -203,11 +203,6 @@ typedef NS_ENUM(NSUInteger, CZTextFieldOverideMethodType) {
 {
     [super drawTextInRect:rect];
     self.OriginalPlaceholderLabel.hidden = YES;
-}
-
-- (void)drawTextInRect:(CGRect)rect
-{
-    [super drawTextInRect:rect];
     CGFloat y = self.textContentOffset + kBottomMargin;
     CGFloat x = (self.borderStyle == UITextBorderStyleNone) ? 8 + rect.origin.x : rect.origin.x;
     self.placeHolderLabel.frame = CGRectMake(x, y, rect.size.width, rect.size.height);
@@ -232,28 +227,36 @@ typedef NS_ENUM(NSUInteger, CZTextFieldOverideMethodType) {
 
 - (void)zoomOutPlaceholderLabel:(BOOL)zoomOut animate:(BOOL)animate
 {
-//    if (CGRectEqualToRect(self.placeHolderLabel.frame, CGRectZero)) return;
+    if (CGRectEqualToRect(self.placeHolderLabel.frame, CGRectZero) || self.isZoomingOut == zoomOut) return;
     self.isZoomingOut = zoomOut;
     
     if (zoomOut) {      // 缩小
+        if (!CGAffineTransformEqualToTransform(self.placeHolderLabel.transform, CGAffineTransformIdentity)) return;
+        CGAffineTransform scaleTransform = CGAffineTransformMakeScale(self.placeholderScalingFactor, self.placeholderScalingFactor);
+        CGFloat translationX = -(self.placeHolderLabel.frame.size.width * .5f - self.placeHolderLabel.frame.size.width * .5f * self.placeholderScalingFactor + self.leftView.frame.size.width);
+        CGFloat translationY = -(self.placeHolderLabel.frame.size.height * .5f - self.placeHolderLabel.frame.size.height * .5f * self.placeholderScalingFactor + self.placeHolderLabel.frame.origin.y - kBottomMargin);
+        CGAffineTransform translationTransform = CGAffineTransformMakeTranslation(translationX, translationY);
+        
         if (animate) {
             [UIView animateWithDuration:.3f animations:^{
                 self.placeHolderLabel.transform = CGAffineTransformMakeScale(self.placeholderScalingFactor, self.placeholderScalingFactor);
-//                self.placeHolderLabel.frame = CGRectMake(self.placeholderLabelNormalRect.origin.x, 4, self.placeholderLabelNormalRect.size.width, self.placeholderLabelNormalRect.size.height);
             }];
         }else{
             self.placeHolderLabel.transform = CGAffineTransformMakeScale(self.placeholderScalingFactor, self.placeholderScalingFactor);
-//            self.placeHolderLabel.frame = CGRectMake(self.placeholderLabelNormalRect.origin.x, 4, self.placeholderLabelNormalRect.size.width, self.placeholderLabelNormalRect.size.height);
+        }else{
+            self.placeHolderLabel.transform = CGAffineTransformConcat(scaleTransform, translationTransform);
         }
     }else{      // 放大
+        if (CGAffineTransformEqualToTransform(self.placeHolderLabel.transform, CGAffineTransformIdentity)) return;
         if (animate) {
             [UIView animateWithDuration:.3f animations:^{
                 self.placeHolderLabel.transform = CGAffineTransformIdentity;
-//                self.placeHolderLabel.frame = self.placeholderLabelNormalRect;
             }];
         }else{
             self.placeHolderLabel.transform = CGAffineTransformIdentity;
-//            self.placeHolderLabel.frame = self.placeholderLabelNormalRect;
+            }];
+        }else{
+            self.placeHolderLabel.transform = CGAffineTransformIdentity;
         }
     }
 }
