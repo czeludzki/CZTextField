@@ -31,3 +31,90 @@ Carthage
 # `pod install` in .travis.yml
 #
 # Pods/
+Example/Podfile.lock
+Example/CZTextField.xcworkspace/contents.xcworkspacedata
+Example/Pods/Manifest.lock
+Example/Pods/FBSnapshotTestCase/LICENSE
+Example/Pods/FBSnapshotTestCase/README.md
+Example/Pods/FBSnapshotTestCase/FBSnapshotTestCase/FBSnapshotTestCase.h
+Example/Pods/FBSnapshotTestCase/FBSnapshotTestCase/FBSnapshotTestCase.m
+Example/Pods/FBSnapshotTestCase/FBSnapshotTestCase/FBSnapshotTestCasePlatform.h
+Example/Pods/FBSnapshotTestCase/FBSnapshotTestCase/FBSnapshotTestCasePlatform.m
+Example/Pods/FBSnapshotTestCase/FBSnapshotTestCase/FBSnapshotTestController.h
+Example/Pods/FBSnapshotTestCase/FBSnapshotTestCase/FBSnapshotTestController.m
+Example/Pods/FBSnapshotTestCase/FBSnapshotTestCase/SwiftSupport.swift
+Example/Pods/FBSnapshotTestCase/FBSnapshotTestCase/Categories/UIApplication+StrictKeyWindow.h
+Example/Pods/FBSnapshotTestCase/FBSnapshotTestCase/Categories/UIApplication+StrictKeyWindow.m
+Example/Pods/FBSnapshotTestCase/FBSnapshotTestCase/Categories/UIImage+Compare.h
+Example/Pods/FBSnapshotTestCase/FBSnapshotTestCase/Categories/UIImage+Compare.m
+Example/Pods/FBSnapshotTestCase/FBSnapshotTestCase/Categories/UIImage+Diff.h
+Example/Pods/FBSnapshotTestCase/FBSnapshotTestCase/Categories/UIImage+Diff.m
+Example/Pods/FBSnapshotTestCase/FBSnapshotTestCase/Categories/UIImage+Snapshot.h
+Example/Pods/FBSnapshotTestCase/FBSnapshotTestCase/Categories/UIImage+Snapshot.m
+Example/Pods/Local Podspecs/CZTextField.podspec.json
+Example/Pods/Masonry/LICENSE
+Example/Pods/Masonry/README.md
+Example/Pods/Masonry/Masonry/MASCompositeConstraint.h
+Example/Pods/Masonry/Masonry/MASCompositeConstraint.m
+Example/Pods/Masonry/Masonry/MASConstraint+Private.h
+Example/Pods/Masonry/Masonry/MASConstraint.h
+Example/Pods/Masonry/Masonry/MASConstraint.m
+Example/Pods/Masonry/Masonry/MASConstraintMaker.h
+Example/Pods/Masonry/Masonry/MASConstraintMaker.m
+Example/Pods/Masonry/Masonry/MASLayoutConstraint.h
+Example/Pods/Masonry/Masonry/MASLayoutConstraint.m
+Example/Pods/Masonry/Masonry/Masonry.h
+Example/Pods/Masonry/Masonry/MASUtilities.h
+Example/Pods/Masonry/Masonry/MASViewAttribute.h
+Example/Pods/Masonry/Masonry/MASViewAttribute.m
+Example/Pods/Masonry/Masonry/MASViewConstraint.h
+Example/Pods/Masonry/Masonry/MASViewConstraint.m
+Example/Pods/Masonry/Masonry/NSArray+MASAdditions.h
+Example/Pods/Masonry/Masonry/NSArray+MASAdditions.m
+Example/Pods/Masonry/Masonry/NSArray+MASShorthandAdditions.h
+Example/Pods/Masonry/Masonry/NSLayoutConstraint+MASDebugAdditions.h
+Example/Pods/Masonry/Masonry/NSLayoutConstraint+MASDebugAdditions.m
+Example/Pods/Masonry/Masonry/View+MASAdditions.h
+Example/Pods/Masonry/Masonry/View+MASAdditions.m
+Example/Pods/Masonry/Masonry/View+MASShorthandAdditions.h
+Example/Pods/Masonry/Masonry/ViewController+MASAdditions.h
+Example/Pods/Masonry/Masonry/ViewController+MASAdditions.m
+Example/Pods/Pods.xcodeproj/project.pbxproj
+Example/Pods/Target Support Files/CZTextField/CZTextField-dummy.m
+Example/Pods/Target Support Files/CZTextField/CZTextField-prefix.pch
+Example/Pods/Target Support Files/CZTextField/CZTextField-umbrella.h
+Example/Pods/Target Support Files/CZTextField/CZTextField.modulemap
+Example/Pods/Target Support Files/CZTextField/CZTextField.xcconfig
+Example/Pods/Target Support Files/CZTextField/Info.plist
+Example/Pods/Target Support Files/FBSnapshotTestCase/FBSnapshotTestCase-dummy.m
+Example/Pods/Target Support Files/FBSnapshotTestCase/FBSnapshotTestCase-prefix.pch
+Example/Pods/Target Support Files/FBSnapshotTestCase/FBSnapshotTestCase-umbrella.h
+Example/Pods/Target Support Files/FBSnapshotTestCase/FBSnapshotTestCase.modulemap
+Example/Pods/Target Support Files/FBSnapshotTestCase/FBSnapshotTestCase.xcconfig
+Example/Pods/Target Support Files/FBSnapshotTestCase/Info.plist
+Example/Pods/Target Support Files/Masonry/Info.plist
+Example/Pods/Target Support Files/Masonry/Masonry-dummy.m
+Example/Pods/Target Support Files/Masonry/Masonry-prefix.pch
+Example/Pods/Target Support Files/Masonry/Masonry-umbrella.h
+Example/Pods/Target Support Files/Masonry/Masonry.modulemap
+Example/Pods/Target Support Files/Masonry/Masonry.xcconfig
+Example/Pods/Target Support Files/Pods-CZTextField_Example/Info.plist
+Example/Pods/Target Support Files/Pods-CZTextField_Example/Pods-CZTextField_Example-acknowledgements.markdown
+Example/Pods/Target Support Files/Pods-CZTextField_Example/Pods-CZTextField_Example-acknowledgements.plist
+Example/Pods/Target Support Files/Pods-CZTextField_Example/Pods-CZTextField_Example-dummy.m
+Example/Pods/Target Support Files/Pods-CZTextField_Example/Pods-CZTextField_Example-frameworks.sh
+Example/Pods/Target Support Files/Pods-CZTextField_Example/Pods-CZTextField_Example-resources.sh
+Example/Pods/Target Support Files/Pods-CZTextField_Example/Pods-CZTextField_Example-umbrella.h
+Example/Pods/Target Support Files/Pods-CZTextField_Example/Pods-CZTextField_Example.debug.xcconfig
+Example/Pods/Target Support Files/Pods-CZTextField_Example/Pods-CZTextField_Example.modulemap
+Example/Pods/Target Support Files/Pods-CZTextField_Example/Pods-CZTextField_Example.release.xcconfig
+Example/Pods/Target Support Files/Pods-CZTextField_Tests/Info.plist
+Example/Pods/Target Support Files/Pods-CZTextField_Tests/Pods-CZTextField_Tests-acknowledgements.markdown
+Example/Pods/Target Support Files/Pods-CZTextField_Tests/Pods-CZTextField_Tests-acknowledgements.plist
+Example/Pods/Target Support Files/Pods-CZTextField_Tests/Pods-CZTextField_Tests-dummy.m
+Example/Pods/Target Support Files/Pods-CZTextField_Tests/Pods-CZTextField_Tests-frameworks.sh
+Example/Pods/Target Support Files/Pods-CZTextField_Tests/Pods-CZTextField_Tests-resources.sh
+Example/Pods/Target Support Files/Pods-CZTextField_Tests/Pods-CZTextField_Tests-umbrella.h
+Example/Pods/Target Support Files/Pods-CZTextField_Tests/Pods-CZTextField_Tests.debug.xcconfig
+Example/Pods/Target Support Files/Pods-CZTextField_Tests/Pods-CZTextField_Tests.modulemap
+Example/Pods/Target Support Files/Pods-CZTextField_Tests/Pods-CZTextField_Tests.release.xcconfig
