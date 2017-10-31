@@ -243,17 +243,12 @@ typedef NS_ENUM(NSUInteger, CZTextFieldOverideMethodType) {
             }];
         }else{
             self.placeHolderLabel.transform = CGAffineTransformMakeScale(self.placeholderScalingFactor, self.placeholderScalingFactor);
-        }else{
-            self.placeHolderLabel.transform = CGAffineTransformConcat(scaleTransform, translationTransform);
         }
     }else{      // 放大
         if (CGAffineTransformEqualToTransform(self.placeHolderLabel.transform, CGAffineTransformIdentity)) return;
         if (animate) {
             [UIView animateWithDuration:.3f animations:^{
                 self.placeHolderLabel.transform = CGAffineTransformIdentity;
-            }];
-        }else{
-            self.placeHolderLabel.transform = CGAffineTransformIdentity;
             }];
         }else{
             self.placeHolderLabel.transform = CGAffineTransformIdentity;
