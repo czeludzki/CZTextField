@@ -106,9 +106,9 @@ typedef NS_ENUM(NSUInteger, CZTextFieldOverideMethodType) {
 {
     [super layoutSubviews];
     if (self.text.length > 0 || self.isEditing) {
-        [self zoomOutPlaceholderLabel:YES animate:NO];
+        [self zoomOutPlaceholderLabel:YES animate:YES];
     }else{
-        [self zoomOutPlaceholderLabel:NO animate:NO];
+        [self zoomOutPlaceholderLabel:NO animate:YES];
     }
 }
 
@@ -203,10 +203,12 @@ typedef NS_ENUM(NSUInteger, CZTextFieldOverideMethodType) {
 {
     [super drawTextInRect:rect];
     self.OriginalPlaceholderLabel.hidden = YES;
+    
+    if (!CGRectEqualToRect(self.placeholderLabelNormalRect, CGRectZero)) return;
     CGFloat y = self.textContentOffset + kBottomMargin;
     CGFloat x = (self.borderStyle == UITextBorderStyleNone) ? 8 + rect.origin.x : rect.origin.x;
-    self.placeHolderLabel.frame = CGRectMake(x, y, rect.size.width, rect.size.height);
-    [self.placeHolderLabel sizeToFit];
+    CGSize placeholderSize = [self sizeWithText:self.placeholder font:self.font maxSize:CGSizeMake(self.frame.size.width, self.frame.size.height)];
+    self.placeHolderLabel.frame = CGRectMake(x, y, placeholderSize.width , placeholderSize.height);
     self.placeholderLabelNormalRect = self.placeHolderLabel.frame;
 }
 
@@ -231,29 +233,38 @@ typedef NS_ENUM(NSUInteger, CZTextFieldOverideMethodType) {
     self.isZoomingOut = zoomOut;
     
     if (zoomOut) {      // 缩小
-        if (!CGAffineTransformEqualToTransform(self.placeHolderLabel.transform, CGAffineTransformIdentity)) return;
         CGAffineTransform scaleTransform = CGAffineTransformMakeScale(self.placeholderScalingFactor, self.placeholderScalingFactor);
-        CGFloat translationX = -(self.placeHolderLabel.frame.size.width * .5f - self.placeHolderLabel.frame.size.width * .5f * self.placeholderScalingFactor + self.leftView.frame.size.width);
-        CGFloat translationY = -(self.placeHolderLabel.frame.size.height * .5f - self.placeHolderLabel.frame.size.height * .5f * self.placeholderScalingFactor + self.placeHolderLabel.frame.origin.y - kBottomMargin);
+        
+        CGFloat translationX = -(self.placeholderLabelNormalRect.size.width * .5f - self.placeholderLabelNormalRect.size.width * .5f * self.placeholderScalingFactor + self.leftView.frame.size.width);
+        CGFloat translationY = -(self.placeholderLabelNormalRect.size.height * .5f - self.placeholderLabelNormalRect.size.height * .5f * self.placeholderScalingFactor + self.placeholderLabelNormalRect.origin.y - kBottomMargin);
         CGAffineTransform translationTransform = CGAffineTransformMakeTranslation(translationX, translationY);
         
         if (animate) {
             [UIView animateWithDuration:.3f animations:^{
-                self.placeHolderLabel.transform = CGAffineTransformMakeScale(self.placeholderScalingFactor, self.placeholderScalingFactor);
+                self.placeHolderLabel.frame = self.placeholderLabelNormalRect;
+                self.placeHolderLabel.transform = CGAffineTransformConcat(scaleTransform, translationTransform);
             }];
         }else{
-            self.placeHolderLabel.transform = CGAffineTransformMakeScale(self.placeholderScalingFactor, self.placeholderScalingFactor);
+            self.placeHolderLabel.frame = self.placeholderLabelNormalRect;
+            self.placeHolderLabel.transform = CGAffineTransformConcat(scaleTransform, translationTransform);
         }
-    }else{      // 放大
-        if (CGAffineTransformEqualToTransform(self.placeHolderLabel.transform, CGAffineTransformIdentity)) return;
+    }else{      // 还原
         if (animate) {
             [UIView animateWithDuration:.3f animations:^{
                 self.placeHolderLabel.transform = CGAffineTransformIdentity;
+                self.placeHolderLabel.frame = self.placeholderLabelNormalRect;
             }];
         }else{
             self.placeHolderLabel.transform = CGAffineTransformIdentity;
+            self.placeHolderLabel.frame = self.placeholderLabelNormalRect;
         }
     }
+}
+
+- (CGSize)sizeWithText:(NSString *)text font:(UIFont *)font maxSize:(CGSize)maxSize
+{
+    NSDictionary *attrs = @{NSFontAttributeName : font};
+    return [text boundingRectWithSize:maxSize options:NSStringDrawingUsesLineFragmentOrigin attributes:attrs context:nil].size;
 }
 
 @end
