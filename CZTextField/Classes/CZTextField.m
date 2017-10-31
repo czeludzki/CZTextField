@@ -19,6 +19,12 @@ typedef NS_ENUM(NSUInteger, CZTextFieldOverideMethodType) {
     CZTextFieldOverideMethodType_PlaceholderRect = 1 << 5
 };
 
+typedef NS_ENUM(NSUInteger, CZTextFieldPlaceholderStatus) {
+    CZTextFieldPlaceholderStatus_UnKnow = 0,
+    CZTextFieldPlaceholderStatus_Normal = 1 << 1,
+    CZTextFieldPlaceholderStatus_ZoomOut = 1 << 2
+};
+
 @interface CZTextField ()
 @property (nonatomic, weak, readonly) UILabel *placeHolderLabel;
 // 输入内容往下偏移量
@@ -28,7 +34,7 @@ typedef NS_ENUM(NSUInteger, CZTextFieldOverideMethodType) {
  YES: 缩小到左上角
  NO : 正常状态
  */
-@property (nonatomic, assign) BOOL isZoomingOut;
+@property (nonatomic, assign) CZTextFieldPlaceholderStatus placeholderStatus;
 /**
  记录原生的 placeholderLabel
  */
@@ -79,11 +85,11 @@ typedef NS_ENUM(NSUInteger, CZTextFieldOverideMethodType) {
     if (self = [super initWithCoder:aDecoder]) {
         [self initSetup];
         //  重新设置在 storyboard / xib 中默认的 Placeholder 到 self.placeHolderLabel
-        NSString *placeholderContent = self.placeholder;
-        self.placeholder = placeholderContent;
-        // attributesPlaceholder
         NSAttributedString *attributesPlaceholder = self.attributedPlaceholder;
         self.attributedPlaceholder = attributesPlaceholder;
+        
+        NSString *placeholderContent = self.placeholder;
+        self.placeholder = placeholderContent;
     }
     return self;
 }
@@ -91,11 +97,10 @@ typedef NS_ENUM(NSUInteger, CZTextFieldOverideMethodType) {
 - (void)initSetup
 {
     _placeholderScalingFactor = .7f;
-    _isZoomingOut = NO;
 //    self.clipsToBounds = YES;
     // placeHolderLabel
     UILabel *placeHolderLabel = [[UILabel alloc] init];
-    placeHolderLabel.backgroundColor = [UIColor colorWithRed:255/255 green:132/255 blue:99/255 alpha:.6f];
+    placeHolderLabel.backgroundColor = [UIColor clearColor];
     placeHolderLabel.font = self.font;
     [self addSubview:placeHolderLabel];
     _placeHolderLabel = placeHolderLabel;
@@ -106,9 +111,9 @@ typedef NS_ENUM(NSUInteger, CZTextFieldOverideMethodType) {
 {
     [super layoutSubviews];
     if (self.text.length > 0 || self.isEditing) {
-        [self zoomOutPlaceholderLabel:YES animate:YES];
+        [self zoomOutPlaceholderLabel:CZTextFieldPlaceholderStatus_ZoomOut animate:YES];
     }else{
-        [self zoomOutPlaceholderLabel:NO animate:YES];
+        [self zoomOutPlaceholderLabel:CZTextFieldPlaceholderStatus_Normal animate:YES];
     }
 }
 
@@ -116,32 +121,22 @@ typedef NS_ENUM(NSUInteger, CZTextFieldOverideMethodType) {
 {
     [super setText:text];
     if (text.length > 0 || self.isEditing) {
-        [self zoomOutPlaceholderLabel:YES animate:NO];
+        [self zoomOutPlaceholderLabel:CZTextFieldPlaceholderStatus_ZoomOut animate:YES];
     }else{
-        [self zoomOutPlaceholderLabel:NO animate:NO];
+        [self zoomOutPlaceholderLabel:CZTextFieldPlaceholderStatus_Normal animate:YES];
     }
-}
-
-- (NSString *)placeholder
-{
-    return [super placeholder];
 }
 
 - (void)setPlaceholder:(NSString *)placeholder
 {
-    self.placeHolderLabel.text = placeholder;
     [super setPlaceholder:placeholder];
-}
-
-- (NSAttributedString *)attributedPlaceholder
-{
-    return [super attributedPlaceholder];
+    self.placeHolderLabel.text = placeholder;
 }
 
 - (void)setAttributedPlaceholder:(NSAttributedString *)attributedPlaceholder
 {
-    self.placeHolderLabel.attributedText = attributedPlaceholder;
     [super setAttributedPlaceholder:attributedPlaceholder];
+    self.placeHolderLabel.attributedText = attributedPlaceholder;
 }
 
 - (void)setFont:(UIFont *)font
@@ -155,7 +150,6 @@ typedef NS_ENUM(NSUInteger, CZTextFieldOverideMethodType) {
 {
     CGSize superSize = [super intrinsicContentSize];
     if (self.borderStyle == UITextBorderStyleNone) {
-        NSLog(@"superSize = %@",NSStringFromCGSize(superSize));
         superSize = CGSizeMake(superSize.width, superSize.height >= 30 ? superSize.height : 30);
     }
     self.textContentOffset = superSize.height * self.placeholderScalingFactor;
@@ -166,6 +160,15 @@ typedef NS_ENUM(NSUInteger, CZTextFieldOverideMethodType) {
 {
     CGRect superTextRect = [super textRectForBounds:bounds];
     CGRect calculateRect = [self calculateOffSetRectFromSuper:superTextRect withOverideMethodType:CZTextFieldOverideMethodType_TextRect];
+    
+    // 从此处取得 Placeholder 的 frame, 设置到 PlaceholderLabel
+    if (!CGRectEqualToRect(self.placeholderLabelNormalRect, CGRectZero)) return calculateRect;
+    CGFloat y = self.frame.size.height * self.placeholderScalingFactor + kBottomMargin;
+    CGFloat x = calculateRect.origin.x;
+    CGSize placeholderSize = [self sizeWithText:self.placeholder font:self.font maxSize:CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX)];
+    self.placeHolderLabel.frame = CGRectMake(x, y, placeholderSize.width , placeholderSize.height);
+    self.placeholderLabelNormalRect = self.placeHolderLabel.frame;
+    
     return calculateRect;
 }
 
@@ -203,13 +206,6 @@ typedef NS_ENUM(NSUInteger, CZTextFieldOverideMethodType) {
 {
     [super drawTextInRect:rect];
     self.OriginalPlaceholderLabel.hidden = YES;
-    
-    if (!CGRectEqualToRect(self.placeholderLabelNormalRect, CGRectZero)) return;
-    CGFloat y = self.textContentOffset + kBottomMargin;
-    CGFloat x = (self.borderStyle == UITextBorderStyleNone) ? 8 + rect.origin.x : rect.origin.x;
-    CGSize placeholderSize = [self sizeWithText:self.placeholder font:self.font maxSize:CGSizeMake(self.frame.size.width, self.frame.size.height)];
-    self.placeHolderLabel.frame = CGRectMake(x, y, placeholderSize.width , placeholderSize.height);
-    self.placeholderLabelNormalRect = self.placeHolderLabel.frame;
 }
 
 #pragma mark - Helper
@@ -224,15 +220,16 @@ typedef NS_ENUM(NSUInteger, CZTextFieldOverideMethodType) {
     BOOL judgeStyle = (self.borderStyle == UITextBorderStyleNone);
     
     CGFloat x = (judgeStyle && judgeMethod) ? superRect.origin.x + 8 : superRect.origin.x;
-    return CGRectMake(x, y, superRect.size.width, superRect.size.height);
+    CGRect result = CGRectMake(x, y, superRect.size.width, superRect.size.height);
+    return result;
 }
 
-- (void)zoomOutPlaceholderLabel:(BOOL)zoomOut animate:(BOOL)animate
+- (void)zoomOutPlaceholderLabel:(CZTextFieldPlaceholderStatus)placeholderStatus animate:(BOOL)animate
 {
-    if (CGRectEqualToRect(self.placeHolderLabel.frame, CGRectZero) || self.isZoomingOut == zoomOut) return;
-    self.isZoomingOut = zoomOut;
+    if (CGRectEqualToRect(self.placeHolderLabel.frame, CGRectZero) || self.placeholderStatus == placeholderStatus) return;
+    self.placeholderStatus = placeholderStatus;
     
-    if (zoomOut) {      // 缩小
+    if (placeholderStatus == CZTextFieldPlaceholderStatus_ZoomOut) {      // 缩小
         CGAffineTransform scaleTransform = CGAffineTransformMakeScale(self.placeholderScalingFactor, self.placeholderScalingFactor);
         
         CGFloat translationX = -(self.placeholderLabelNormalRect.size.width * .5f - self.placeholderLabelNormalRect.size.width * .5f * self.placeholderScalingFactor + self.leftView.frame.size.width);
@@ -248,7 +245,7 @@ typedef NS_ENUM(NSUInteger, CZTextFieldOverideMethodType) {
             self.placeHolderLabel.frame = self.placeholderLabelNormalRect;
             self.placeHolderLabel.transform = CGAffineTransformConcat(scaleTransform, translationTransform);
         }
-    }else{      // 还原
+    }else if (placeholderStatus == CZTextFieldPlaceholderStatus_Normal){      // 还原
         if (animate) {
             [UIView animateWithDuration:.3f animations:^{
                 self.placeHolderLabel.transform = CGAffineTransformIdentity;

@@ -51,7 +51,7 @@
 
 - (void)cz_textFieldBeginEditing:(CZTextField *)sender
 {
-
+    
 }
 
 - (IBAction)sliderValueChange:(UISlider *)sender {

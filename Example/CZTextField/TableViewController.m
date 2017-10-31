@@ -35,11 +35,11 @@
 #pragma mark - Table view data source && delegate
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    CGFloat superHeight = [super tableView:tableView heightForRowAtIndexPath:indexPath];
+//    CGFloat superHeight = [super tableView:tableView heightForRowAtIndexPath:indexPath];
     if (indexPath.row == 0){
-        return self.tableViewHeaderBtn.selected ? .1f : superHeight;
+        return self.tableViewHeaderBtn.selected ? .1f : UITableViewAutomaticDimension;
     }else{
-        return superHeight;
+        return UITableViewAutomaticDimension;
     }
 }
 
