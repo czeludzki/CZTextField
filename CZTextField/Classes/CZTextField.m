@@ -8,7 +8,7 @@
 #import "CZTextField.h"
 #import "Masonry.h"
 
-#define kBottomMargin 4
+#define kMargin 4
 
 typedef NS_ENUM(NSUInteger, CZTextFieldOverideMethodType) {
     CZTextFieldOverideMethodType_TextRect = 1,
@@ -164,7 +164,7 @@ typedef NS_ENUM(NSUInteger, CZTextFieldPlaceholderStatus) {
     // 如果 placeholderLabelNormalRect 已有值 || textContentOffset 还没计算完毕, 则不往下计算
     if (self.textContentOffset == 0 || !CGRectEqualToRect(self.placeholderLabelNormalRect, CGRectZero)) return calculateRect;
     // 从此处取得 Placeholder 的 frame, 设置到 PlaceholderLabel
-    CGFloat y = calculateRect.origin.y + self.textContentOffset * .5f - kBottomMargin;
+    CGFloat y = calculateRect.origin.y + self.textContentOffset * .5f;
     CGFloat x = calculateRect.origin.x;
     CGSize placeholderSize = [self sizeWithText:self.placeholder font:self.font maxSize:CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX)];
     self.placeHolderLabel.frame = CGRectMake(x, y, placeholderSize.width , placeholderSize.height);
@@ -212,9 +212,7 @@ typedef NS_ENUM(NSUInteger, CZTextFieldPlaceholderStatus) {
 #pragma mark - Helper
 - (CGRect)calculateOffSetRectFromSuper:(CGRect)superRect withOverideMethodType:(CZTextFieldOverideMethodType)methodType
 {
-    CGFloat y = self.frame.size.height - 4 > superRect.origin.y + superRect.size.height ?
-    superRect.origin.y + self.textContentOffset * .5f - kBottomMargin :
-    superRect.origin.y + self.textContentOffset * .5f;
+    CGFloat y = superRect.origin.y + self.textContentOffset * .5f;
     
     // 判断如果 borderStyle 是 UITextBorderStyleNone, 且 重构位置的方法 是 clearButton 或 rightView, 就使他们右移 8pt
     BOOL judgeMethod = !(methodType & (CZTextFieldOverideMethodType_ClearButtonRect |  CZTextFieldOverideMethodType_RightViewRect));
@@ -234,7 +232,7 @@ typedef NS_ENUM(NSUInteger, CZTextFieldPlaceholderStatus) {
         CGAffineTransform scaleTransform = CGAffineTransformMakeScale(self.placeholderScalingFactor, self.placeholderScalingFactor);
         
         CGFloat translationX = -(self.placeholderLabelNormalRect.size.width * .5f - self.placeholderLabelNormalRect.size.width * .5f * self.placeholderScalingFactor + self.leftView.frame.size.width);
-        CGFloat translationY = -(self.placeholderLabelNormalRect.size.height * .5f - self.placeholderLabelNormalRect.size.height * .5f * self.placeholderScalingFactor + self.placeholderLabelNormalRect.origin.y - kBottomMargin);
+        CGFloat translationY = -(self.placeholderLabelNormalRect.size.height * .5f - self.placeholderLabelNormalRect.size.height * .5f * self.placeholderScalingFactor + self.placeholderLabelNormalRect.origin.y - kMargin);
         CGAffineTransform translationTransform = CGAffineTransformMakeTranslation(translationX, translationY);
         
         if (animate) {
