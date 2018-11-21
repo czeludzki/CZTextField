@@ -24,8 +24,8 @@
     
     UIButton *textFieldLeftView = [UIButton buttonWithType:UIButtonTypeSystem];
     [textFieldLeftView setTitle:@"我是按钮哦" forState:UIControlStateNormal];
-//    self.textField.leftView = textFieldLeftView;
-//    self.textField.leftViewMode = UITextFieldViewModeAlways;
+    self.textField.leftView = textFieldLeftView;
+    self.textField.leftViewMode = UITextFieldViewModeAlways;
     textFieldLeftView.frame = CGRectMake(0, 0, 0, 0);
     [textFieldLeftView sizeToFit];
     
