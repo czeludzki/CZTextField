@@ -23,6 +23,7 @@
     self.textField.font = [UIFont systemFontOfSize:18];
     
     UIButton *textFieldLeftView = [UIButton buttonWithType:UIButtonTypeSystem];
+    textFieldLeftView.backgroundColor = [UIColor redColor];
     [textFieldLeftView setTitle:@"我是按钮哦" forState:UIControlStateNormal];
     self.textField.leftView = textFieldLeftView;
     self.textField.leftViewMode = UITextFieldViewModeAlways;

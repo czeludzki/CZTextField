@@ -168,8 +168,9 @@ typedef NS_ENUM(NSUInteger, CZTextFieldPlaceholderStatus) {
     CGFloat x = calculateRect.origin.x;
     CGSize placeholderSize = [self sizeWithText:self.placeholder font:self.font maxSize:CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX)];
     self.placeHolderLabel.frame = CGRectMake(x, y, placeholderSize.width , placeholderSize.height);
-    self.placeholderLabelNormalRect = self.placeHolderLabel.frame;
-    
+    CGRect t_rect = self.placeHolderLabel.frame;
+    t_rect.origin.y = (bounds.size.height - t_rect.size.height) * .5f;
+    self.placeholderLabelNormalRect = t_rect;
     return calculateRect;
 }
 
@@ -187,8 +188,11 @@ typedef NS_ENUM(NSUInteger, CZTextFieldPlaceholderStatus) {
 
 - (CGRect)leftViewRectForBounds:(CGRect)bounds
 {
-    CGRect superLeftViewRect = [super leftViewRectForBounds:bounds];
-    return [self calculateOffSetRectFromSuper:superLeftViewRect withOverideMethodType:CZTextFieldOverideMethodType_LeftViewRect];
+    CGRect superRect = [super leftViewRectForBounds:bounds];
+    CGRect t_rect = [self calculateOffSetRectFromSuper:superRect withOverideMethodType:CZTextFieldOverideMethodType_LeftViewRect];
+    // 使leftview垂直居中
+    t_rect.origin.y = (bounds.size.height - t_rect.size.height) * .5f;
+    return t_rect;
 }
 
 - (CGRect)rightViewRectForBounds:(CGRect)bounds
@@ -231,7 +235,8 @@ typedef NS_ENUM(NSUInteger, CZTextFieldPlaceholderStatus) {
     if (placeholderStatus == CZTextFieldPlaceholderStatus_ZoomOut) {      // 缩小
         CGAffineTransform scaleTransform = CGAffineTransformMakeScale(self.placeholderScalingFactor, self.placeholderScalingFactor);
         
-        CGFloat translationX = -(self.placeholderLabelNormalRect.size.width * .5f - self.placeholderLabelNormalRect.size.width * .5f * self.placeholderScalingFactor + self.leftView.frame.size.width);
+//        CGFloat translationX = -(self.placeholderLabelNormalRect.size.width * .5f - self.placeholderLabelNormalRect.size.width * .5f * self.placeholderScalingFactor + self.leftView.frame.size.width);
+        CGFloat translationX = -(self.placeholderLabelNormalRect.size.width * .5f - self.placeholderLabelNormalRect.size.width * .5f * self.placeholderScalingFactor);
         CGFloat translationY = -(self.placeholderLabelNormalRect.size.height * .5f - self.placeholderLabelNormalRect.size.height * .5f * self.placeholderScalingFactor + self.placeholderLabelNormalRect.origin.y - kMargin);
         CGAffineTransform translationTransform = CGAffineTransformMakeTranslation(translationX, translationY);
         
