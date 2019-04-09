@@ -255,6 +255,9 @@
 				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = czeludzki;
 				TargetAttributes = {
+					6003F589195388D20070C39A = {
+						DevelopmentTeam = 5YG2N89PSR;
+					};
 					6003F5AD195388D20070C39A = {
 						TestTargetID = 6003F589195388D20070C39A;
 					};
@@ -265,6 +268,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -544,6 +548,7 @@
 			baseConfigurationReference = 2550E958FC4DC99BB2AA2437 /* Pods-CZTextField_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 5YG2N89PSR;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CZTextField/CZTextField-Prefix.pch";
 				INFOPLIST_FILE = "CZTextField/CZTextField-Info.plist";
@@ -559,6 +564,7 @@
 			baseConfigurationReference = 68939D238D79D950A3940535 /* Pods-CZTextField_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 5YG2N89PSR;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CZTextField/CZTextField-Prefix.pch";
 				INFOPLIST_FILE = "CZTextField/CZTextField-Info.plist";

@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'CZTextField'
-  s.version          = '0.1.8'
+  s.version          = '0.1.9'
   s.summary          = 'An textfield with animated placeholders'
 
   s.description      = 'An textfield with animated placeholders.'

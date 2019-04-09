@@ -38,7 +38,7 @@
 {
     CGFloat superHeight = [super tableView:tableView heightForRowAtIndexPath:indexPath];
     if (indexPath.row == 0){
-        return self.tableViewHeaderBtn.selected ? .1f : UITableViewAutomaticDimension;
+        return !self.tableViewHeaderBtn.selected ? .1f : UITableViewAutomaticDimension;
     }else{
         return superHeight;
     }

@@ -43,6 +43,7 @@ typedef NS_ENUM(NSUInteger, CZTextFieldPlaceholderStatus) {
  记录 Placeholder 的处于非编辑状态时的 Rect
  */
 @property (nonatomic, assign) CGRect placeholderLabelNormalRect;
+@property (nonatomic, assign) CGRect old_bounds;
 @end
 
 @implementation CZTextField
@@ -99,6 +100,7 @@ typedef NS_ENUM(NSUInteger, CZTextFieldPlaceholderStatus) {
 - (void)initSetup
 {
     _placeholderScalingFactor = .7f;
+    _old_bounds = CGRectMake(0, 0, CGFLOAT_MAX, CGFLOAT_MAX);
     // placeHolderLabel
     UILabel *placeHolderLabel = [[UILabel alloc] init];
     placeHolderLabel.backgroundColor = [UIColor clearColor];
@@ -159,18 +161,23 @@ typedef NS_ENUM(NSUInteger, CZTextFieldPlaceholderStatus) {
 - (CGRect)textRectForBounds:(CGRect)bounds
 {
     CGRect superTextRect = [super textRectForBounds:bounds];
+    // 这里不知道是不是有个系统的bug, 偶尔会出现传来bounds并非self.bounds, 所以先判断 bounds.size
+    if (!CGSizeEqualToSize(bounds.size, self.bounds.size)) return superTextRect;
     CGRect calculateRect = [self calculateOffSetRectFromSuper:superTextRect withOverideMethodType:CZTextFieldOverideMethodType_TextRect];
+    // 如果处于编辑状态, 则不响应更新placeholderlabel.frame的操作
+    if (self.placeholderStatus == CZTextFieldPlaceholderStatus_ZoomOut) return calculateRect;
     
     // 如果 placeholderLabelNormalRect 已有值 || textContentOffset 还没计算完毕, 则不往下计算
-    if (self.textContentOffset == 0 || !CGRectEqualToRect(self.placeholderLabelNormalRect, CGRectZero)) return calculateRect;
+    if ((self.textContentOffset == 0 || !CGRectEqualToRect(self.placeholderLabelNormalRect, CGRectZero)) && CGRectEqualToRect(self.old_bounds, bounds)) return calculateRect;
+    self.old_bounds = bounds;
     // 从此处取得 Placeholder 的 frame, 设置到 PlaceholderLabel
-    CGFloat y = calculateRect.origin.y + self.textContentOffset * .5f;
+    CGFloat y = calculateRect.origin.y;
     CGFloat x = calculateRect.origin.x;
     CGSize placeholderSize = [self sizeWithText:self.placeholder font:self.font maxSize:CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX)];
-    self.placeHolderLabel.frame = CGRectMake(x, y, placeholderSize.width , placeholderSize.height);
-    CGRect t_rect = self.placeHolderLabel.frame;
+    CGRect t_rect = CGRectMake(x, y, placeholderSize.width , placeholderSize.height);
     t_rect.origin.y = (bounds.size.height - t_rect.size.height) * .5f;
     self.placeholderLabelNormalRect = t_rect;
+    self.placeHolderLabel.frame = t_rect;
     return calculateRect;
 }
 
@@ -235,29 +242,24 @@ typedef NS_ENUM(NSUInteger, CZTextFieldPlaceholderStatus) {
     if (placeholderStatus == CZTextFieldPlaceholderStatus_ZoomOut) {      // 缩小
         CGAffineTransform scaleTransform = CGAffineTransformMakeScale(self.placeholderScalingFactor, self.placeholderScalingFactor);
         
-//        CGFloat translationX = -(self.placeholderLabelNormalRect.size.width * .5f - self.placeholderLabelNormalRect.size.width * .5f * self.placeholderScalingFactor + self.leftView.frame.size.width);
         CGFloat translationX = -(self.placeholderLabelNormalRect.size.width * .5f - self.placeholderLabelNormalRect.size.width * .5f * self.placeholderScalingFactor);
         CGFloat translationY = -(self.placeholderLabelNormalRect.size.height * .5f - self.placeholderLabelNormalRect.size.height * .5f * self.placeholderScalingFactor + self.placeholderLabelNormalRect.origin.y - kMargin);
         CGAffineTransform translationTransform = CGAffineTransformMakeTranslation(translationX, translationY);
         
         if (animate) {
             [UIView animateWithDuration:.3f animations:^{
-                self.placeHolderLabel.frame = self.placeholderLabelNormalRect;
                 self.placeHolderLabel.transform = CGAffineTransformConcat(scaleTransform, translationTransform);
             }];
         }else{
-            self.placeHolderLabel.frame = self.placeholderLabelNormalRect;
             self.placeHolderLabel.transform = CGAffineTransformConcat(scaleTransform, translationTransform);
         }
     }else if (placeholderStatus == CZTextFieldPlaceholderStatus_Normal){      // 还原
         if (animate) {
             [UIView animateWithDuration:.3f animations:^{
                 self.placeHolderLabel.transform = CGAffineTransformIdentity;
-                self.placeHolderLabel.frame = self.placeholderLabelNormalRect;
             }];
         }else{
             self.placeHolderLabel.transform = CGAffineTransformIdentity;
-            self.placeHolderLabel.frame = self.placeholderLabelNormalRect;
         }
     }
 }
